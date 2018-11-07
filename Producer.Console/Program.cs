@@ -12,7 +12,7 @@ namespace Producer.Console
             System.Console.WriteLine("Producer console!");
             
             var settings = Helpers.GetMessagingSettings();
-            var producer = new Messaging.Producer(settings.BrokerName, settings.RoutingKey);
+            var producer = Messaging.Producer.GetInstance(settings.BrokerName, settings.RoutingKey);
             var name = System.Console.ReadLine();
             var message = $"Hello my name is, {name}";
             System.Console.WriteLine("sending message: {0}", message);

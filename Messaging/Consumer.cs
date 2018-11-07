@@ -8,11 +8,13 @@ namespace Messaging
 {
     public class Consumer
     {
+        private static Consumer instance = null;
+        private static readonly object padlock = new object();
         private IConnection connection; 
         private ConnectionFactory factory;
         private IModel channel; 
 
-        public Consumer(string broker, string queueName)
+        private Consumer(string broker, string queueName)
         {            
             factory = new ConnectionFactory() { HostName = broker };
             connection = factory.CreateConnection();
@@ -23,6 +25,18 @@ namespace Messaging
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
+        }
+
+        public static Consumer GetInstance(string broker, string queueName)
+        {
+            lock (padlock)
+            {
+                if (instance == null)
+                {
+                    instance = new Consumer(broker, queueName);
+                }
+                return instance;
+            }
         }
 
         public void ReceiveMessages(string routeKey)

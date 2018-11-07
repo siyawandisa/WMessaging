@@ -11,7 +11,7 @@ namespace Consumer.Console
             System.Console.WriteLine("Consumer console!");
 
             var settings = Helpers.GetMessagingSettings();            
-            var consumer = new Messaging.Consumer(settings.BrokerName, settings.RoutingKey);
+            var consumer = Messaging.Consumer.GetInstance(settings.BrokerName, settings.RoutingKey);
             consumer.ReceiveMessages(settings.RoutingKey);
         }
     }
